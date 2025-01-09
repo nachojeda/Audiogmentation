@@ -135,11 +135,11 @@ class GTZANDataset(Dataset):
         line = self.song_list[index]
 
         # get genre
-        genre_name = line.split('/')[0]
+        genre_name = line.split('\\')[0]
         genre_index = self.genres.index(genre_name)
 
         # get audio
-        audio_filename = os.path.join(self.data_path, 'genres', line)
+        audio_filename = os.path.join(self.data_path, "genres_original", line)
         self.samples, self.sample_rate = lb.load(audio_filename)
 
 
