@@ -15,16 +15,15 @@ if __name__ == "__main__":
     # Load train data
     train_loader = get_dataloader(data_path='datasets/', split='train')
     iter_train_loader = iter(train_loader)
-    train_wav, train_genre = next(iter_train_loader)
+    train_data = next(iter_train_loader)
 
     # Load validation data
-    valid_loader = get_dataloader(split='valid')
+    valid_loader = get_dataloader(data_path='datasets/', split='val')
 
-    # Load test data
-    test_loader = get_dataloader(split='test')
+    # # Load test data
+    test_loader = get_dataloader(data_path='datasets/', split='test')
 
     iter_test_loader = iter(test_loader)
-    test_wav, test_genre = next(iter_test_loader)
-    print('training data shape: %s' % str(train_wav.shape))
-    print('validation/test data shape: %s' % str(test_wav.shape))
-    print(train_genre)
+    test_data = next(iter_test_loader)
+    print('training data shape: %s' % str(train_data.shape))
+    print('validation/test data shape: %s' % str(test_data.shape))
