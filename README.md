@@ -15,6 +15,20 @@ A sophisticated music genre classification system enhanced with audio data augme
 - Comprehensive audio processing capabilities
 - Support for various audio formats and transformations
 
+## Dataset
+
+This project uses the dataset introduced in the paper "Automatic Musical Genre Classification Of Audio Signals". If you use this dataset in your research, please cite:
+
+```bibtex
+@misc{tzanetakis_essl_cook_2001,
+    author    = "Tzanetakis, George and Essl, Georg and Cook, Perry",
+    title     = "Automatic Musical Genre Classification Of Audio Signals",
+    url       = "http://ismir2001.ismir.net/pdf/tzanetakis.pdf",
+    publisher = "The International Society for Music Information Retrieval",
+    year      = "2001"
+}
+```
+
 ## Tech Stack
 
 - **Python**: Core programming language
