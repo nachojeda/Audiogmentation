@@ -3,7 +3,7 @@ import torchaudio
 import numpy as np
 from torch import nn
 
-from src.models.layers import Conv_2d
+from models.layers import Conv_2d
 
 class CNN(nn.Module):
     def __init__(self, num_channels=16, 

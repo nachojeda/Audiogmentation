@@ -1,0 +1,22 @@
+# Data parameters
+data:
+  path: "datasets" 
+  num_samples: 640450  # 22050 * 29
+  num_chunks: 1
+  
+# Training parameters
+training:
+  batch_size: 16
+  num_workers: 4
+  learning_rate: 0.001
+  
+# Model parameters
+model:
+  num_channels: 16
+  sample_rate: 22050
+  n_fft: 1024
+  num_mels: 128
+  
+# Output parameters
+output:
+  save_dir: "models"
