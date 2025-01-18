@@ -3,12 +3,14 @@ data:
   path: "datasets" 
   num_samples: 640450  # 22050 * 29
   num_chunks: 1
+  GTZAN_GENRES: ['blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
+
   
 # Training parameters
 training:
   batch_size: 16
   num_workers: 4
-  learning_rate: 0.001
+  learning_rate: 0.005
   
 # Model parameters
 model:

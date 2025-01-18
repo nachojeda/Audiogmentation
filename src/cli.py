@@ -6,16 +6,7 @@ from pathlib import Path
 from data.loader import get_dataloader
 from models.model import CNN
 from models.trainer import CNNTrainer
-
-# def parse_args():
-#     """Parse command line arguments."""
-#     parser = argparse.ArgumentParser(description='Train CNN model on GTZAN dataset')
-#     parser.add_argument('--num_epochs', type=int, required=True,
-#                         help='Number of epochs to train')
-#     parser.add_argument('--config', type=str, default='config.yaml',
-#                         help='Path to configuration file')
-    
-#     return parser.parse_args()
+from models.tester import Tester
 
 def load_config(config_path):
     """Load configuration from YAML file."""
@@ -33,24 +24,24 @@ def main():
     save_dir.mkdir(parents=True, exist_ok=True)
     save_path = save_dir / 'best_model.ckpt'
         
-    # Initialize dataloaders
-    train_loader = get_dataloader(
-        data_path=cfg['data']['path'],
-        split='train',
-        num_samples=cfg['data']['num_samples'],
-        num_chunks=cfg['data']['num_chunks'],
-        batch_size=cfg['training']['batch_size'],
-        num_workers=cfg['training']['num_workers']
-    )
+    # # Initialize dataloaders
+    # train_loader = get_dataloader(
+    #     data_path=cfg['data']['path'],
+    #     split='train',
+    #     num_samples=cfg['data']['num_samples'],
+    #     num_chunks=cfg['data']['num_chunks'],
+    #     batch_size=cfg['training']['batch_size'],
+    #     num_workers=cfg['training']['num_workers']
+    # )
     
-    valid_loader = get_dataloader(
-        data_path=cfg['data']['path'],
-        split='val',
-        num_samples=cfg['data']['num_samples'],
-        num_chunks=cfg['data']['num_chunks'],
-        batch_size=cfg['training']['batch_size'],
-        num_workers=cfg['training']['num_workers']
-    )
+    # valid_loader = get_dataloader(
+    #     data_path=cfg['data']['path'],
+    #     split='val',
+    #     num_samples=cfg['data']['num_samples'],
+    #     num_chunks=cfg['data']['num_chunks'],
+    #     batch_size=cfg['training']['batch_size'],
+    #     num_workers=cfg['training']['num_workers']
+    # )
     
     # Initialize model
     model = CNN(
@@ -60,18 +51,36 @@ def main():
         num_mels=cfg['model']['num_mels']
     )
     
-    # Initialize trainer
-    trainer = CNNTrainer(
-        model=model,
-        learning_rate=cfg['training']['learning_rate'],
-    )
+    # # Initialize trainer
+    # trainer = CNNTrainer(
+    #     model=model,
+    #     learning_rate=cfg['training']['learning_rate'],
+    # )
     
-    # Train model
-    valid_losses = trainer.train(
-        train_loader=train_loader,
-        valid_loader=valid_loader,
-        num_epochs=num_epochs,
-        save_path=save_path
-    )
+    # # Train model
+    # valid_losses = trainer.train(
+    #     train_loader=train_loader,
+    #     valid_loader=valid_loader,
+    #     num_epochs=num_epochs,
+    #     save_path=save_path
+    # )
     
     print(f"\nTraining completed. Model saved to {save_path}")
+
+    # Evaluate model
+    test_loader = get_dataloader(
+        data_path=cfg['data']['path'],
+        split='test',
+        num_samples=cfg['data']['num_samples'],
+        num_chunks=cfg['data']['num_chunks'],
+        batch_size=cfg['training']['batch_size'],
+        num_workers=cfg['training']['num_workers']
+    )
+
+    tester = Tester(
+        model=model,
+        path=save_path
+    )
+
+    tester._evaluate()
+    tester._print_conf_matrix()

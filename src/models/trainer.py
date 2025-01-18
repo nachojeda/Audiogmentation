@@ -182,17 +182,17 @@ class CNNTrainer:
                 
         return np.mean(losses), accuracy_score(y_true, y_pred)
 
-    def _save_model(self, epoch: int, save_path: str) -> None:
-        """
-        Save the model if it's the best so far.
+    # def _save_model(self, epoch: int, save_path: str) -> None:
+    #     """
+    #     Save the model if it's the best so far.
         
-        Args:
-            epoch: Current epoch number
-            save_path: Path to save the model checkpoint
-        """
-        if np.argmin(self.valid_losses) == epoch:
-            print(f'Saving the best model at {epoch} epochs!')
-            torch.save(self.model.state_dict(), save_path)
+    #     Args:
+    #         epoch: Current epoch number
+    #         save_path: Path to save the model checkpoint
+    #     """
+    #     if np.argmin(self.valid_losses) == epoch:
+    #         print(f'Saving the best model at {epoch} epochs!')
+    #         torch.save(self.model.state_dict(), save_path)
 
     def train(
         self,
@@ -227,6 +227,6 @@ class CNNTrainer:
 
             # Save model
             self.valid_losses.append(valid_loss)
-            self._save_model(epoch, save_path)
+            # self._save_model(epoch, save_path)
             
         return self.valid_losses

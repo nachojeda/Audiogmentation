@@ -25,9 +25,6 @@ from audiomentations import (
 # )
 
 
-GTZAN_GENRES = ['blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock']
-
-
 class GTZANDataset(Dataset):
     def __init__(self, data_path, split, num_samples, num_chunks):
         self.data_path =  data_path if data_path else ''
@@ -35,7 +32,6 @@ class GTZANDataset(Dataset):
         self.num_samples = num_samples
         self.num_chunks = num_chunks
         # self.is_augmentation = is_augmentation
-        self.genres = GTZAN_GENRES
         self._get_song_list()
         # if is_augmentation:
         #     self._get_augmentations()
