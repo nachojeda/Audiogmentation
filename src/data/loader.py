@@ -26,11 +26,12 @@ from audiomentations import (
 
 
 class GTZANDataset(Dataset):
-    def __init__(self, data_path, split, num_samples, num_chunks):
+    def __init__(self, data_path, split, num_samples, num_chunks, genres):
         self.data_path =  data_path if data_path else ''
         self.split = split
         self.num_samples = num_samples
         self.num_chunks = num_chunks
+        self.genres = genres
         # self.is_augmentation = is_augmentation
         self._get_song_list()
         # if is_augmentation:
@@ -84,7 +85,8 @@ class GTZANDataset(Dataset):
     def __len__(self):
         return len(self.song_list)
 
-def get_dataloader(data_path=None, 
+def get_dataloader(genres,
+                    data_path=None, 
                    split='train',
                    num_samples=22050 * 29, 
                    num_chunks=1,
@@ -96,7 +98,8 @@ def get_dataloader(data_path=None,
     data_loader = DataLoader(dataset=GTZANDataset(data_path, 
                                                     split,
                                                     num_samples, 
-                                                    num_chunks
+                                                    num_chunks,
+                                                    genres=genres
                                                 ),
                                   batch_size=batch_size,
                                   shuffle=is_shuffle,

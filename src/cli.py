@@ -1,4 +1,4 @@
-import argparse
+import torch
 import yaml
 import os
 from pathlib import Path
@@ -18,7 +18,8 @@ def main():
     num_epochs = int(os.sys.argv[1])
     config = os.sys.argv[2]
     cfg = load_config(config)
-    
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
     # Create save directory if it doesn't exist
     save_dir = Path(cfg['output']['save_dir'])
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -31,7 +32,8 @@ def main():
     #     num_samples=cfg['data']['num_samples'],
     #     num_chunks=cfg['data']['num_chunks'],
     #     batch_size=cfg['training']['batch_size'],
-    #     num_workers=cfg['training']['num_workers']
+    #     num_workers=cfg['training']['num_workers'],
+    #     genres=cfg['data']['GTZAN_GENRES']
     # )
     
     # valid_loader = get_dataloader(
@@ -40,7 +42,8 @@ def main():
     #     num_samples=cfg['data']['num_samples'],
     #     num_chunks=cfg['data']['num_chunks'],
     #     batch_size=cfg['training']['batch_size'],
-    #     num_workers=cfg['training']['num_workers']
+    #     num_workers=cfg['training']['num_workers'],
+    #     genres=cfg['data']['GTZAN_GENRES']
     # )
     
     # Initialize model
@@ -74,7 +77,8 @@ def main():
         num_samples=cfg['data']['num_samples'],
         num_chunks=cfg['data']['num_chunks'],
         batch_size=cfg['training']['batch_size'],
-        num_workers=cfg['training']['num_workers']
+        num_workers=cfg['training']['num_workers'],
+        genres=cfg['data']['GTZAN_GENRES']
     )
 
     tester = Tester(
@@ -82,5 +86,13 @@ def main():
         path=save_path
     )
 
-    tester._evaluate()
-    tester._print_conf_matrix()
+    y_true, y_pred, accuracy = tester._evaluate(
+        device=device,
+        test_loader=test_loader
+    )
+    tester._print_conf_matrix(
+        y_true=y_true,
+        y_pred=y_pred,
+        accuracy=accuracy,
+        GTZAN_GENRES=cfg['data']['GTZAN_GENRES']
+    )

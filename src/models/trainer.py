@@ -81,15 +81,15 @@ import numpy as np
 import torch
 from torch import nn
 from sklearn.metrics import accuracy_score
-from typing import Optional, List, Tuple
+from typing import List, Tuple
 from torch.utils.data import DataLoader
 
 class CNNTrainer:
     def __init__(
         self,
         model: nn.Module,
-        learning_rate: float = 0.001,
-        device: Optional[torch.device] = None
+        device: torch.device,
+        learning_rate: float = 0.001
     ):
         """
         Initialize the CNN trainer.
@@ -99,7 +99,7 @@ class CNNTrainer:
             learning_rate: Learning rate for optimization
             device: Device to run the model on (cuda/cpu)
         """
-        self.device = device if device else torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.device = device
         self.model = model.to(self.device)
         self.learning_rate = learning_rate
         self.loss_function = nn.CrossEntropyLoss()
