@@ -18,33 +18,34 @@ def main():
     num_epochs = int(os.sys.argv[1])
     config = os.sys.argv[2]
     cfg = load_config(config)
+    model_name = cfg['model']['name']
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # Create save directory if it doesn't exist
     save_dir = Path(cfg['output']['save_dir'])
     save_dir.mkdir(parents=True, exist_ok=True)
-    save_path = save_dir / 'best_model.ckpt'
+    save_path = save_dir / (model_name + '.ckpt')
         
-    # # Initialize dataloaders
-    # train_loader = get_dataloader(
-    #     data_path=cfg['data']['path'],
-    #     split='train',
-    #     num_samples=cfg['data']['num_samples'],
-    #     num_chunks=cfg['data']['num_chunks'],
-    #     batch_size=cfg['training']['batch_size'],
-    #     num_workers=cfg['training']['num_workers'],
-    #     genres=cfg['data']['GTZAN_GENRES']
-    # )
+    # Initialize dataloaders
+    train_loader = get_dataloader(
+        data_path=cfg['data']['path'],
+        split='train',
+        num_samples=cfg['data']['num_samples'],
+        num_chunks=cfg['data']['num_chunks'],
+        batch_size=cfg['training']['batch_size'],
+        num_workers=cfg['training']['num_workers'],
+        genres=cfg['data']['GTZAN_GENRES']
+    )
     
-    # valid_loader = get_dataloader(
-    #     data_path=cfg['data']['path'],
-    #     split='val',
-    #     num_samples=cfg['data']['num_samples'],
-    #     num_chunks=cfg['data']['num_chunks'],
-    #     batch_size=cfg['training']['batch_size'],
-    #     num_workers=cfg['training']['num_workers'],
-    #     genres=cfg['data']['GTZAN_GENRES']
-    # )
+    valid_loader = get_dataloader(
+        data_path=cfg['data']['path'],
+        split='val',
+        num_samples=cfg['data']['num_samples'],
+        num_chunks=cfg['data']['num_chunks'],
+        batch_size=cfg['training']['batch_size'],
+        num_workers=cfg['training']['num_workers'],
+        genres=cfg['data']['GTZAN_GENRES']
+    )
     
     # Initialize model
     model = CNN(
@@ -54,19 +55,20 @@ def main():
         num_mels=cfg['model']['num_mels']
     )
     
-    # # Initialize trainer
-    # trainer = CNNTrainer(
-    #     model=model,
-    #     learning_rate=cfg['training']['learning_rate'],
-    # )
+    # Initialize trainer
+    trainer = CNNTrainer(
+        model=model,
+        learning_rate=cfg['training']['learning_rate'],
+        device=device
+    )
     
-    # # Train model
-    # valid_losses = trainer.train(
-    #     train_loader=train_loader,
-    #     valid_loader=valid_loader,
-    #     num_epochs=num_epochs,
-    #     save_path=save_path
-    # )
+    # Train model
+    valid_losses = trainer.train(
+        train_loader=train_loader,
+        valid_loader=valid_loader,
+        num_epochs=num_epochs,
+        save_path=save_path
+    )
     
     print(f"\nTraining completed. Model saved to {save_path}")
 
@@ -94,5 +96,6 @@ def main():
         y_true=y_true,
         y_pred=y_pred,
         accuracy=accuracy,
-        GTZAN_GENRES=cfg['data']['GTZAN_GENRES']
+        GTZAN_GENRES=cfg['data']['GTZAN_GENRES'],
+        save_path=('output/'+model_name+'.png')
     )
