@@ -8,6 +8,9 @@ from models.model import CNN
 from models.trainer import CNNTrainer
 from models.tester import Tester
 
+from torchviz import make_dot
+import graphviz
+
 def load_config(config_path):
     """Load configuration from YAML file."""
     with open(config_path, 'r') as f:
@@ -54,6 +57,21 @@ def main():
         n_fft=cfg['model']['n_fft'],
         num_mels=cfg['model']['num_mels']
     )
+    
+    # Create a sample input (assuming 1 second of audio at 22050Hz)
+    sample_input = torch.randn(1, 22050)
+
+    # Generate the visualization
+    dot = make_dot(model(sample_input), params=dict(model.named_parameters()))
+
+    # Set some visualization parameters
+    dot.attr(rankdir='TB')  # Top to bottom layout
+    dot.attr('node', shape='box')  # Box shaped nodes
+
+    # Save the visualization
+    dot.render("cnn_architecture", format="png", cleanup=True)
+
+    print("Architecture visualization has been saved as 'cnn_architecture.png'")
     
     # Initialize trainer
     trainer = CNNTrainer(

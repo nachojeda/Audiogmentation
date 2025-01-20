@@ -1,5 +1,5 @@
 import torchaudio
-# import librosa
+import librosa
 import numpy as np
 from torch import nn
 
@@ -13,7 +13,7 @@ class CNN(nn.Module):
                        f_max=11025.0, 
                        num_mels=128, 
                        num_classes=10):
-        # hop_length=512
+        
         super(CNN, self).__init__()
 
         # mel spectrogram
@@ -24,10 +24,15 @@ class CNN(nn.Module):
                                                             n_mels=num_mels)
         self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
 
-        # Librosa alternative: Not feasible due to necessity of audio for function declaration
-        # D = np.abs(librosa.stft(y, n_fft = n_fft, hop_length = hop_length))
+        # # Librosa alternative: Not feasible due to necessity of audio for function declaration
+        # hop_length=512
+        # self.melspec = np.abs(librosa.stft(ndarray,
+        #                                    n_fft = n_fft,
+        #                                    hop_length = hop_length))
+        
         # # Convert an amplitude spectrogram to Decibels-scaled spectrogram.
-        # DB = librosa.amplitude_to_db(D, ref = np.max)
+        # self.amplitude_to_db = librosa.amplitude_to_db(ref = np.max)
+        
         self.input_bn = nn.BatchNorm2d(1)
 
         # convolutional layers
