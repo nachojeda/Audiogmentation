@@ -69,7 +69,7 @@ def main():
     dot.attr('node', shape='box')  # Box shaped nodes
 
     # Save the visualization
-    dot.render("cnn_architecture", format="png", cleanup=True)
+    dot.render("output/cnn_architecture", format="png", cleanup=True)
 
     print("Architecture visualization has been saved as 'cnn_architecture.png'")
     
