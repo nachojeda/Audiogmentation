@@ -12,7 +12,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["10", "configs/model_config.yaml"]
+            "args": ["1", "configs/model_config.yaml"]
         }
     ]
 }

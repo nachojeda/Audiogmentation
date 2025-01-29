@@ -1,87 +1,10 @@
-# import numpy as np
-# from sklearn.metrics import accuracy_score, confusion_matrix
-# import torch
-# from torch import nn
-
-# from src.models.model import CNN
-
-
-# device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-# cnn = CNN().to(device)
-# loss_function = nn.CrossEntropyLoss()
-# optimizer = torch.optim.Adam(cnn.parameters(), lr=0.001)
-# valid_losses = []
-# num_epochs = 1
-
-# print('\n' + '='*50)
-# print('{:^50}'.format('TRAINING CONFIGURATION'))
-# print('='*50)
-# print('{:<20} : {}'.format('Device', device))
-# print('{:<20} : {}'.format('Architecture', 'CNN'))
-# print('{:<20} : {}'.format('Loss Function', loss_function.__class__.__name__))
-# print('{:<20} : {}'.format('Optimizer', 'Adam'))
-# print('{:<20} : {}'.format('Learning Rate', '0.001'))
-# print('{:<20} : {}'.format('Number of Epochs', num_epochs))
-# print('='*50 + '\n')
-
-# for epoch in range(num_epochs):
-#     losses = []
-
-#     # Train
-#     cnn.train()
-#     for (wav, genre_index) in train_loader:
-#         wav = wav.to(device)
-#         genre_index = genre_index.to(device)
-
-#         # Forward
-#         out = cnn(wav)
-#         loss = loss_function(out, genre_index)
-
-#         # Backward
-#         optimizer.zero_grad()
-#         loss.backward()
-#         optimizer.step()
-#         losses.append(loss.item())
-#     print('Epoch: [%d/%d], Train loss: %.4f' % (epoch+1, num_epochs, np.mean(losses)))
-
-#     # Validation
-#     cnn.eval()
-#     y_true = []
-#     y_pred = []
-#     losses = []
-#     for wav, genre_index in valid_loader:
-#         wav = wav.to(device)
-#         genre_index = genre_index.to(device)
-
-#         # reshape and aggregate chunk-level predictions
-#         b, c, t = wav.size()
-#         logits = cnn(wav.view(-1, t))
-#         logits = logits.view(b, c, -1).mean(dim=1)
-#         loss = loss_function(logits, genre_index)
-#         losses.append(loss.item())
-#         _, pred = torch.max(logits.data, 1)
-
-#         # append labels and predictions
-#         y_true.extend(genre_index.tolist())
-#         y_pred.extend(pred.tolist())
-#     accuracy = accuracy_score(y_true, y_pred)
-#     valid_loss = np.mean(losses)
-#     print('Epoch: [%d/%d], Valid loss: %.4f, Valid accuracy: %.4f' % (epoch+1, num_epochs, valid_loss, accuracy))
-
-#     # Save model
-#     valid_losses.append(valid_loss.item())
-#     if np.argmin(valid_losses) == epoch:
-#         print('Saving the best model at %d epochs!' % epoch)
-#         torch.save(cnn.state_dict(), '../../models/best_model.ckpt')
-
-
-
-
 import numpy as np
 import torch
 from torch import nn
 from sklearn.metrics import accuracy_score
 from typing import List, Tuple
+import mlflow
+
 from torch.utils.data import DataLoader
 
 class CNNTrainer:
@@ -89,7 +12,9 @@ class CNNTrainer:
         self,
         model: nn.Module,
         device: torch.device,
-        learning_rate: float = 0.001
+        loss_function,
+        optimizer,
+        learning_rate: float = 0.001,
     ):
         """
         Initialize the CNN trainer.
@@ -102,8 +27,8 @@ class CNNTrainer:
         self.device = device
         self.model = model.to(self.device)
         self.learning_rate = learning_rate
-        self.loss_function = nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate)
+        self.loss_function = loss_function
+        self.optimizer = optimizer
         self.valid_losses: List[float] = []
         
     def _print_config(self, num_epochs: int) -> None:
@@ -222,11 +147,13 @@ class CNNTrainer:
 
             # Validate
             valid_loss, accuracy = self._validate(valid_loader)
+            mlflow.log_metric("loss", f"{valid_loss:3f}", step=epoch)
+            mlflow.log_metric("accuracy", f"{accuracy:3f}", step=epoch)
+
             print(f'Epoch: [{epoch+1}/{num_epochs}], Valid loss: {valid_loss:.4f}, '
                   f'Valid accuracy: {accuracy:.4f}')
 
             # Save model
             self.valid_losses.append(valid_loss)
-            self._save_model(epoch, save_path)
+            # self._save_model(epoch, save_path)
             
-        return self.valid_losses
