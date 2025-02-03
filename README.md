@@ -4,6 +4,7 @@
 ![PyTorch](https://img.shields.io/badge/pytorch-2.5.1-ee4c2c.svg?logo=pytorch&logoColor=white)
 ![NumPy](https://img.shields.io/badge/numpy-1.26.4-013243.svg?logo=numpy&logoColor=white)
 ![Librosa](https://img.shields.io/badge/librosa-0.10.2-yellow.svg?logo=python&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-2.19.0-blue.svg?logo=mlflow&logoColor=white)
 
 A sophisticated music genre classification system enhanced with audio data augmentation techniques. This project comes is a newer  and productive-oriented version of my undergraduate thesis. It leverages multiple audio processing libraries and machine learning frameworks to perform accurate genre classification while employing audio augmentation methods to improve model robustness and performance.
 
