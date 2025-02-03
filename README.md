@@ -13,7 +13,6 @@ A sophisticated music genre classification system enhanced with audio data augme
 - Advanced audio data augmentation techniques
 - Built with modern Python package management using `uv`
 - Comprehensive audio processing capabilities
-- Support for various audio formats and transformations
 
 ## Dataset
 
@@ -34,10 +33,10 @@ This project uses the dataset introduced in the paper "Automatic Musical Genre C
 - **Python**: Core programming language
 - **PyTorch & Torchaudio**: Deep learning framework and audio processing
 - **Librosa**: Audio and music processing
-- **Audiomentations**: Audio data augmentation
 - **Scikit-learn**: Machine learning utilities
 - **Numpy & Pandas**: Data manipulation and analysis
 - **Matplotlib & Seaborn**: Data visualization
+- **Mlflow**: Experiment tracker
 
 ## Prerequisites
 
