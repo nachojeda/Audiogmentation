@@ -71,4 +71,22 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-##
+## Usage
+
+The code can be executed using the following pattern:
+
+```bash
+python src/__main__.py <num_epochs> <config_file_path>
+```
+
+Where:
+
+- **num_epochs**: Number of epochs for training the model. This determines how many times the model will iterate through the entire training dataset.
+- **config_file_path**: Path to the configuration file that contains the model's training parameters and hyperparameters.
+
+Example:
+```bash
+python src/__main__.py 100 configs/model_config.yaml
+```
+
+In this example, the model will train for 100 epochs using the configuration specified in configs/model_config.yaml.
